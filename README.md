@@ -2,7 +2,8 @@
 
 [![NPM](https://nodei.co/npm/@itsmaneka/paapi5-nodejs-sdk.svg?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/@itsmaneka/paapi5-nodejs-sdk/)
 
-[![Version](https://badge.fury.io/js/@itsmaneka/paapi5-nodejs-sdk.svg)](http://badge.fury.io/js/@itsmaneka/paapi5-nodejs-sdk) [![npm](https://img.shields.io/npm/dt/@itsmaneka/paapi5-nodejs-sdk.svg)](https://www.npmjs.com/package/@itsmaneka/paapi5-nodejs-sdk)
+[![npm version](https://badge.fury.io/js/@itsmaneka%2Fpaapi5-nodejs-sdk.svg)](https://badge.fury.io/js/@itsmaneka%2Fpaapi5-nodejs-sdk)
+[![npm](https://img.shields.io/npm/dt/@itsmaneka/paapi5-nodejs-sdk.svg)](https://www.npmjs.com/package/@itsmaneka/paapi5-nodejs-sdk)
 
 > **📢 Important Note**: This is an actively maintained fork of the [original paapi5-nodejs-sdk](https://github.com/wusoma/paapi5-nodejs-sdk) which has been without maintenance for years. This enhanced version includes OffersV2 support, security improvements, TypeScript definitions, and ongoing maintenance.
 
