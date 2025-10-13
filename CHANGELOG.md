@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <!--LATEST=1.2.0-->
 <!--ENTRYINSERT-->
 
-## [1.2.4] - 
+## [1.2.5] - 
 
 ### 🔄 Changed
 - **Package Scope**: Package name changed to `@itsmaneka/paapi5-nodejs-sdk` for better organization and active maintenance

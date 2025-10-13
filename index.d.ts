@@ -98,7 +98,7 @@ declare module '@itsmaneka/paapi5-nodejs-sdk' {
 		SavingBasis?: Money;
 	}
 
-	export type AvailabilityType = 'Available' | 'Preorderable' | 'OutOfStock' | 'Unknown';
+	export type AvailabilityType = 'PREORDER' | 'OUT_OF_STOCK' | 'IN_STOCK' | 'LEADTIME';
 
 	export interface OfferAvailability {
 		MaxOrderQuantity?: number;
