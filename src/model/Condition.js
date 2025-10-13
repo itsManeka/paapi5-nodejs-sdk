@@ -20,65 +20,65 @@
  */
 
 (function(root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
-    define(['ApiClient'], factory);
-  } else if (typeof module === 'object' && module.exports) {
-    // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'));
-  } else {
-    // Browser globals (root is window)
-    if (!root.ProductAdvertisingAPIv1) {
-      root.ProductAdvertisingAPIv1 = {};
-    }
-    root.ProductAdvertisingAPIv1.Condition = factory(root.ProductAdvertisingAPIv1.ApiClient);
-  }
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['ApiClient'], factory);
+	} else if (typeof module === 'object' && module.exports) {
+		// CommonJS-like environments that support module.exports, like Node.
+		module.exports = factory(require('../ApiClient'));
+	} else {
+		// Browser globals (root is window)
+		if (!root.ProductAdvertisingAPIv1) {
+			root.ProductAdvertisingAPIv1 = {};
+		}
+		root.ProductAdvertisingAPIv1.Condition = factory(root.ProductAdvertisingAPIv1.ApiClient);
+	}
 }(this, function(ApiClient) {
-  'use strict';
+	'use strict';
 
 
-  /**
-   * Enum class Condition.
-   * @enum {}
-   * @readonly
-   */
-  var exports = {
-    /**
-     * value: "Any"
-     * @const
-     */
-    "Any": "Any",
-    /**
-     * value: "Collectible"
-     * @const
-     */
-    "Collectible": "Collectible",
-    /**
-     * value: "New"
-     * @const
-     */
-    "New": "New",
-    /**
-     * value: "Refurbished"
-     * @const
-     */
-    "Refurbished": "Refurbished",
-    /**
-     * value: "Used"
-     * @const
-     */
-    "Used": "Used"  };
+	/**
+	 * Enum class Condition.
+	 * @enum {}
+	 * @readonly
+	 */
+	var exports = {
+		/**
+		 * value: "Any"
+		 * @const
+		 */
+		"Any": "Any",
+		/**
+		 * value: "Collectible"
+		 * @const
+		 */
+		"Collectible": "Collectible",
+		/**
+		 * value: "New"
+		 * @const
+		 */
+		"New": "New",
+		/**
+		 * value: "Refurbished"
+		 * @const
+		 */
+		"Refurbished": "Refurbished",
+		/**
+		 * value: "Used"
+		 * @const
+		 */
+		"Used": "Used"	};
 
-  /**
-   * Returns a <code>Condition</code> enum value from a Javascript object name.
-   * @param {Object} data The plain JavaScript object containing the name of the enum value.
-   * @return {module:model/Condition} The enum <code>Condition</code> value.
-   */
-  exports.constructFromObject = function(object) {
-    return object;
-  }
+	/**
+	 * Returns a <code>Condition</code> enum value from a Javascript object name.
+	 * @param {Object} data The plain JavaScript object containing the name of the enum value.
+	 * @return {module:model/Condition} The enum <code>Condition</code> value.
+	 */
+	exports.constructFromObject = function(object) {
+		return object;
+	}
 
-  return exports;
+	return exports;
 }));
 
 

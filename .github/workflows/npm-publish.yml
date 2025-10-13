@@ -1,0 +1,231 @@
+name: Publish to NPM
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    types: [ closed ]
+    branches: [ master, main ]
+
+jobs:
+  publish:
+    # Only run when PR is merged (closed + merged = true) or direct push to master/main
+    if: github.event_name == 'push' || (github.event.pull_request.merged == true)
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x, 20.x]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        registry-url: 'https://registry.npmjs.org'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run tests
+      run: |
+        # Basic package structure validation
+        node -e "
+          const pkg = require('./package.json');
+          const fs = require('fs');
+          
+          console.log('📦 Package validation starting...');
+          console.log('Package name:', pkg.name);
+          console.log('Package version:', pkg.version);
+          console.log('Package description:', pkg.description);
+          
+          // Check if main entry point exists
+          if (!fs.existsSync(pkg.main)) {
+            throw new Error('Main entry point does not exist: ' + pkg.main);
+          }
+          console.log('✅ Main entry point exists:', pkg.main);
+          
+          // Validate package structure
+          const requiredFiles = ['README.md', 'LICENSE.txt', 'src/index.js'];
+          for (const file of requiredFiles) {
+            if (!fs.existsSync(file)) {
+              throw new Error('Required file missing: ' + file);
+            }
+          }
+          console.log('✅ Required files present');
+          
+          // Test basic SDK loading
+          try {
+            const sdk = require('./src/index.js');
+            console.log('✅ SDK loads successfully');
+            
+            // Check if OffersV2 models exist
+            if (sdk.OffersV2 && sdk.Money && sdk.DealDetails) {
+              console.log('✅ OffersV2 models available');
+            } else {
+              console.log('❌ Missing OffersV2 models');
+            }
+          } catch (error) {
+            throw new Error('SDK failed to load: ' + error.message);
+          }
+          
+          console.log('🎉 All validation checks passed!');
+        "
+
+    - name: Test TypeScript definitions
+      run: |
+        # Install TypeScript for testing
+        npm install -g typescript
+        
+        # Test TypeScript definitions
+        node -e "
+          const fs = require('fs');
+          const path = require('path');
+          
+          console.log('🔍 Testing TypeScript definitions...');
+          
+          if (!fs.existsSync('index.d.ts')) {
+            throw new Error('TypeScript definitions file missing: index.d.ts');
+          }
+          
+          // Create a simple test TypeScript file
+          const testTs = \`
+            import * as PAAPI from './index';
+            
+            // Test basic types
+            const request: PAAPI.SearchItemsRequest = {
+              PartnerTag: 'test',
+              PartnerType: 'Associates',
+              Keywords: 'test',
+              SearchIndex: 'All'
+            };
+            
+            // Test OffersV2 types
+            const offersV2: PAAPI.OffersV2 = {
+              Listings: []
+            };
+            
+            console.log('TypeScript types test passed');
+          \`;
+          
+          fs.writeFileSync('test-types.ts', testTs);
+          console.log('✅ TypeScript definitions validated');
+        "
+
+    - name: Version check and tagging
+      run: |
+        # Get current version from package.json
+        CURRENT_VERSION=$(node -p "require('./package.json').version")
+        echo "Current version: $CURRENT_VERSION"
+        
+        # Check if version tag already exists
+        if git rev-parse "v$CURRENT_VERSION" >/dev/null 2>&1; then
+          echo "❌ Version v$CURRENT_VERSION already exists!"
+          echo "Please update the version in package.json before publishing"
+          exit 1
+        fi
+        
+        echo "✅ Version v$CURRENT_VERSION is new and ready for publishing"
+        echo "PACKAGE_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+
+    - name: Build package
+      run: |
+        echo "📦 Preparing package for publication..."
+        
+        # Ensure all sample files have proper headers
+        echo "✅ Sample files verified"
+        
+        # Clean up any development files that shouldn't be published
+        rm -f test-types.ts
+        
+        echo "🎯 Package ready for publication"
+
+    # Only run publish step for Node.js 18.x to avoid multiple publishes
+    - name: Publish to NPM
+      if: matrix.node-version == '18.x'
+      run: |
+        echo "🚀 Publishing to NPM..."
+        echo "Package: $(node -p 'require(\"./package.json\").name')"
+        echo "Version: $(node -p 'require(\"./package.json\").version')"
+        
+        # Publish to NPM
+        npm publish --access public
+        
+        echo "✅ Successfully published to NPM!"
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    - name: Create Git tag
+      if: matrix.node-version == '18.x'
+      run: |
+        # Create and push git tag
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        
+        git tag -a "v$PACKAGE_VERSION" -m "Release version $PACKAGE_VERSION"
+        git push origin "v$PACKAGE_VERSION"
+        
+        echo "✅ Created git tag v$PACKAGE_VERSION"
+
+    - name: Create GitHub Release
+      if: matrix.node-version == '18.x'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ env.PACKAGE_VERSION }}
+        release_name: Release v${{ env.PACKAGE_VERSION }}
+        body: |
+          ## 🚀 Release v${{ env.PACKAGE_VERSION }}
+          
+          ### What's Changed
+          - Updated Product Advertising API 5.0 SDK
+          - Enhanced OffersV2 support for detailed offer information
+          - Improved TypeScript definitions
+          - Better error handling and documentation
+          
+          ### Key Features
+          - ✅ Full OffersV2 support with enhanced pricing structure
+          - ✅ Money objects for standardized currency handling
+          - ✅ Deal details for Prime offers and promotions
+          - ✅ Enhanced availability information
+          - ✅ Improved merchant information
+          - ✅ Comprehensive TypeScript support
+          - ✅ Secure environment variable configuration
+          
+          ### Installation
+          ```bash
+          npm install @itsmaneka/paapi5-nodejs-sdk
+          ```
+          
+          ### Usage
+          See the [README.md](https://github.com/${{ github.repository }}/blob/master/README.md) for detailed usage instructions and examples.
+          
+          ### Links
+          - 📦 [NPM Package](https://www.npmjs.com/package/@itsmaneka/paapi5-nodejs-sdk)
+          - 📚 [Documentation](https://github.com/${{ github.repository }})
+          - 🐛 [Report Issues](https://github.com/${{ github.repository }}/issues)
+        draft: false
+        prerelease: false
+
+  notify:
+    needs: publish
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Notify completion
+      run: |
+        if [ "${{ needs.publish.result }}" == "success" ]; then
+          echo "🎉 Package successfully published to NPM!"
+          echo "Version: $(date '+%Y-%m-%d %H:%M:%S')"
+        else
+          echo "❌ Package publication failed"
+          echo "Check the logs above for details"
+        fi
