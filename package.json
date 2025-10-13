@@ -1,6 +1,6 @@
 {
 	"name": "@itsmaneka/paapi5-nodejs-sdk",
-	"version": "1.2.1",
+	"version": "1.2.3",
 	"description": "ProductAdvertisingAPI 5.0 NodeJS SDK with OffersV2 support - Enhanced fork with active maintenance",
 	"main": "src/index.js",
 	"types": "index.d.ts",

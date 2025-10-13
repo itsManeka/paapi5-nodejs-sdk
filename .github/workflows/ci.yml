@@ -273,8 +273,8 @@ jobs:
       run: |
         echo "🔍 Scanning for potential secrets..."
         
-        # Check for common secret patterns
-        if grep -r -E "(AKIA[0-9A-Z]{16}|aws_secret_access_key|password.*=)" . --exclude-dir=node_modules --exclude-dir=.git; then
+        # Check for common secret patterns (excluding workflow files to avoid false positives)
+        if grep -r -E "(AKIA[0-9A-Z]{16}|aws_secret_access_key|password.*=)" . --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.github; then
           echo "❌ Potential secrets found in code!"
           exit 1
         fi
