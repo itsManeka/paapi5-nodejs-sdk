@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <!--LATEST=1.2.0-->
 <!--ENTRYINSERT-->
 
-## [Unreleased]
+## [1.2.4] - 
 
 ### 🔄 Changed
 - **Package Scope**: Package name changed to `@itsmaneka/paapi5-nodejs-sdk` for better organization and active maintenance
@@ -21,8 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **README**: Added notice about this being an enhanced fork of the original unmaintained project
 - **Installation**: Updated all installation commands to use the new scoped package name
 - **Documentation**: Updated all references to point to the new package location
-
-## [1.2.0] - 2024-12-12
 
 ### 🆕 Added
 - **OffersV2 Support**: Complete implementation of the new OffersV2 response format

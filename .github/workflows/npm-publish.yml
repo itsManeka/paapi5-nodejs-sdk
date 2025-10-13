@@ -184,21 +184,6 @@ jobs:
         body: |
           ## 🚀 Release v${{ env.PACKAGE_VERSION }}
           
-          ### What's Changed
-          - Updated Product Advertising API 5.0 SDK
-          - Enhanced OffersV2 support for detailed offer information
-          - Improved TypeScript definitions
-          - Better error handling and documentation
-          
-          ### Key Features
-          - ✅ Full OffersV2 support with enhanced pricing structure
-          - ✅ Money objects for standardized currency handling
-          - ✅ Deal details for Prime offers and promotions
-          - ✅ Enhanced availability information
-          - ✅ Improved merchant information
-          - ✅ Comprehensive TypeScript support
-          - ✅ Secure environment variable configuration
-          
           ### Installation
           ```bash
           npm install @itsmaneka/paapi5-nodejs-sdk

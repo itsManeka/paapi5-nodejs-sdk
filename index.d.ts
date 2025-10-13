@@ -1,182 +1,233 @@
-// Type definitions for @itsmaneka/paapi5-nodejs-sdk
-// Project: https://github.com/itsManeka/paapi5-nodejs-sdk
-// Definitions by: PAAPI5 NodeJS SDK Team
+/**
+ * @itsmaneka/paapi5-nodejs-sdk TypeScript Definitions
+ * Versão: 1.0.0
+ * Repositório: https://github.com/itsmaneka/paapi5-nodejs-sdk
+ */
 
 declare module '@itsmaneka/paapi5-nodejs-sdk' {
-	export interface ApiClient {
-		accessKey: string;
-		secretKey: string;
-		host: string;
-		region: string;
+
+	// ===== INTERFACES BÁSICAS =====
+
+	export interface DisplayValue {
+		DisplayValue?: string;
+		Label?: string;
+		Locale?: string;
 	}
 
 	export interface Money {
-		Amount: number;
-		Currency: string;
-		DisplayAmount: string;
+		Amount?: number;
+		Currency?: string;
+		DisplayAmount?: string;
 	}
 
-	export interface DealDetails {
-		AccessType?: string;
-		Badge?: string;
-		EndTime?: string;
-		PercentClaimed?: number;
-		StartTime?: string;
+	// ===== CONFIGURAÇÃO DA API =====
+
+	export interface ApiClientConfig {
+		accessKey?: string;
+		secretKey?: string;
+		host?: string;
+		region?: string;
+		basePath?: string;
 	}
 
-	export interface SavingBasis {
-		Money: Money;
-		SavingBasisType?: string;
-		SavingBasisTypeLabel?: string;
+	export declare class ApiClient {
+		constructor(config?: ApiClientConfig);
+
+		accessKey?: string;
+		secretKey?: string;
+		host?: string;
+		region?: string;
+		basePath?: string;
+
+		static instance: ApiClient;
 	}
 
-	export interface SavingsV2 {
-		Money: Money;
-		Percentage?: number;
-	}
+	// ===== CONTRIBUIDORES E BY LINE INFO =====
 
-	export interface OfferPriceV2 {
-		Money: Money;
-		SavingBasis?: SavingBasis;
-		Savings?: SavingsV2;
-	}
-
-	export interface OfferAvailabilityV2 {
-		MaxOrderQuantity?: number;
-		Message?: string;
-		MinOrderQuantity?: number;
-		Type?: string;
-	}
-
-	export interface OfferConditionV2 {
-		ConditionNote?: string;
-		SubCondition?: string;
-		Value?: string;
-	}
-
-	export interface OfferMerchantInfoV2 {
-		Id?: string;
+	export interface Contributor {
 		Name?: string;
+		Locale?: string;
+		Role?: string;
 	}
 
-	export interface OfferListingV2 {
-		Availability?: OfferAvailabilityV2;
-		Condition?: OfferConditionV2;
-		DealDetails?: DealDetails;
-		IsBuyBoxWinner?: boolean;
-		MerchantInfo?: OfferMerchantInfoV2;
-		Price?: OfferPriceV2;
-		ViolatesMAP?: boolean;
+	export interface ByLineInfo {
+		Brand?: DisplayValue;
+		Manufacturer?: DisplayValue;
+		Contributors?: Contributor[];
 	}
 
-	export interface OffersV2 {
-		__type?: string;
-		Listings?: OfferListingV2[];
-	}
+	// ===== BROWSE NODE INFO =====
 
-	// Legacy Offer interfaces (existing)
-	export interface Price {
-		Amount: number;
-		Currency: string;
-		DisplayAmount: string;
-		Savings?: {
-			Amount: number;
-			Currency: string;
-			DisplayAmount: string;
-			Percentage: number;
-		};
-	}
-
-	export interface OfferListing {
-		Availability?: {
-			MaxOrderQuantity?: number;
-			Message?: string;
-			MinOrderQuantity?: number;
-			Type?: string;
-		};
-		Condition?: {
-			SubCondition?: {
-				Value?: string;
-			};
-			Value?: string;
-		};
-		DeliveryInfo?: {
-			IsAmazonFulfilled?: boolean;
-			IsFreeShippingEligible?: boolean;
-			IsPrimeEligible?: boolean;
-		};
+	export interface BrowseNode {
 		Id?: string;
-		IsBuyBoxWinner?: boolean;
-		MerchantInfo?: {
-			FeedbackCount?: number;
-			FeedbackRating?: number;
-			Id?: string;
-			Name?: string;
-		};
-		Price?: Price;
-		ProgramEligibility?: {
-			IsPrimeExclusive?: boolean;
-			IsPrimePantry?: boolean;
-		};
-		SavingBasis?: Price;
-		ViolatesMAP?: boolean;
-	}
-
-	export interface OfferSummary {
-		Condition?: {
-			Value?: string;
-		};
-		HighestPrice?: Price;
-		LowestPrice?: Price;
-		OfferCount?: number;
-	}
-
-	export interface Offers {
-		Listings?: OfferListing[];
-		Summaries?: OfferSummary[];
+		DisplayName?: string;
+		ContextFreeName?: string;
+		Ancestor?: BrowseNode;
+		Children?: BrowseNode[];
+		SalesRank?: number;
 	}
 
 	export interface BrowseNodeInfo {
-		BrowseNodes?: any[];
+		BrowseNodes?: BrowseNode[];
 		WebsiteSalesRank?: {
+			ContextFreeName?: string;
+			DisplayName?: string;
 			SalesRank?: number;
 		};
 	}
 
-	export interface Images {
-		Primary?: {
-			Large?: {
-				Height?: number;
-				URL?: string;
-				Width?: number;
-			};
-			Medium?: {
-				Height?: number;
-				URL?: string;
-				Width?: number;
-			};
-			Small?: {
-				Height?: number;
-				URL?: string;
-				Width?: number;
-			};
+	// ===== CLASSIFICAÇÕES E CATEGORIAS =====
+
+	export interface Classifications {
+		Bindings?: DisplayValue;
+		ProductGroup?: DisplayValue;
+	}
+
+	// ===== PREÇOS E OFERTAS =====
+
+	export interface OfferPrice {
+		Money?: Money;
+		PriceType?: string;
+		Savings?: Money;
+	}
+
+	export interface OfferPriceV2 {
+		Money?: Money;
+		PriceType?: string;
+		Savings?: Money;
+		SavingBasis?: Money;
+	}
+
+	export type AvailabilityType = 'Available' | 'Preorderable' | 'OutOfStock' | 'Unknown';
+
+	export interface OfferAvailability {
+		MaxOrderQuantity?: number;
+		Message?: string;
+		MinOrderQuantity?: number;
+		Type?: AvailabilityType;
+	}
+
+	export interface MerchantInfo {
+		Id?: string;
+		Name?: string;
+		DefaultShippingCountry?: string;
+	}
+
+	export interface OfferCondition {
+		ConditionNote?: DisplayValue;
+		SubCondition?: DisplayValue;
+		Value?: string;
+	}
+
+	export interface DeliveryInfo {
+		IsAmazonFulfilled?: boolean;
+		IsFreeShippingEligible?: boolean;
+		IsPrimeEligible?: boolean;
+		ShippingCharges?: Money;
+	}
+
+	export interface LoyaltyPoints {
+		Points?: number;
+	}
+
+	export interface ProgramEligibility {
+		IsPrimeExclusive?: boolean;
+		IsPrimePantry?: boolean;
+	}
+
+	export interface OfferListingV2 {
+		Availability?: OfferAvailability;
+		Condition?: OfferCondition;
+		DeliveryInfo?: DeliveryInfo;
+		IsBuyBoxWinner?: boolean;
+		LoyaltyPoints?: LoyaltyPoints;
+		MerchantInfo?: MerchantInfo;
+		Price?: OfferPriceV2;
+		ProgramEligibility?: ProgramEligibility;
+		Promotions?: any[];
+		SavingBasis?: OfferPriceV2;
+		ViolatesMAP?: boolean;
+	}
+
+	export interface OffersV2 {
+		Listings?: OfferListingV2[];
+		Summary?: {
+			HighestPrice?: Money;
+			LowestPrice?: Money;
+			OfferCount?: number;
 		};
 	}
 
+	// ===== INFORMAÇÕES DO ITEM =====
+
 	export interface ItemInfo {
-		ByLineInfo?: any;
-		Classifications?: any;
-		ContentInfo?: any;
-		ExternalIds?: any;
-		Features?: any;
-		ManufactureInfo?: any;
-		ProductInfo?: any;
-		Title?: {
-			DisplayValue?: string;
-			Label?: string;
-			Locale?: string;
+		ByLineInfo?: ByLineInfo;
+		Classifications?: Classifications;
+		ContentInfo?: {
+			Edition?: DisplayValue;
+			PagesCount?: DisplayValue;
+			PublicationDate?: DisplayValue;
+		};
+		ContentRating?: {
+			AudienceRating?: DisplayValue;
+		};
+		ExternalIds?: {
+			EANs?: DisplayValue[];
+			ISBNs?: DisplayValue[];
+			UPCs?: DisplayValue[];
+		};
+		Features?: DisplayValue[];
+		ManufactureInfo?: {
+			ItemPartNumber?: DisplayValue;
+			Model?: DisplayValue;
+			Warranty?: DisplayValue;
+		};
+		ProductInfo?: {
+			Color?: DisplayValue;
+			IsAdultProduct?: DisplayValue;
+			ItemDimensions?: {
+				Height?: DisplayValue;
+				Length?: DisplayValue;
+				Weight?: DisplayValue;
+				Width?: DisplayValue;
+			};
+			ReleaseDate?: DisplayValue;
+			Size?: DisplayValue;
+			UnitCount?: DisplayValue;
+		};
+		TechnicalInfo?: {
+			Formats?: DisplayValue[];
+			EnergyEfficiencyClass?: DisplayValue;
+		};
+		Title?: DisplayValue;
+		TradeInInfo?: {
+			Price?: Money;
+			IsEligibleForTradeIn?: boolean;
 		};
 	}
+
+	// ===== IMAGENS =====
+
+	export interface ImageInfo {
+		URL?: string;
+		Height?: number;
+		Width?: number;
+	}
+
+	export interface Images {
+		Primary?: {
+			Small?: ImageInfo;
+			Medium?: ImageInfo;
+			Large?: ImageInfo;
+		};
+		Variants?: {
+			Small?: ImageInfo[];
+			Medium?: ImageInfo[];
+			Large?: ImageInfo[];
+		};
+	}
+
+	// ===== ITEM COMPLETO =====
 
 	export interface Item {
 		ASIN?: string;
@@ -184,221 +235,240 @@ declare module '@itsmaneka/paapi5-nodejs-sdk' {
 		DetailPageURL?: string;
 		Images?: Images;
 		ItemInfo?: ItemInfo;
-		Offers?: Offers;
 		OffersV2?: OffersV2;
 		ParentASIN?: string;
-		RentalOffers?: any;
+		RentalOffersV2?: any; // Pode ser detalhado se necessário
 		Score?: number;
-		VariationAttributes?: any[];
+		VariationSummary?: any; // Pode ser detalhado se necessário
 	}
 
-	export interface SearchResult {
-		Items?: Item[];
-		SearchURL?: string;
-		TotalResultCount?: number;
+	// ===== RESOURCES UNION TYPES =====
+
+	export type GetItemsResource =
+		| 'BrowseNodeInfo.BrowseNodes'
+		| 'BrowseNodeInfo.BrowseNodes.Ancestor'
+		| 'BrowseNodeInfo.BrowseNodes.SalesRank'
+		| 'BrowseNodeInfo.WebsiteSalesRank'
+		| 'Images.Primary.Small'
+		| 'Images.Primary.Medium'
+		| 'Images.Primary.Large'
+		| 'Images.Variants.Small'
+		| 'Images.Variants.Medium'
+		| 'Images.Variants.Large'
+		| 'ItemInfo.ByLineInfo'
+		| 'ItemInfo.Classifications'
+		| 'ItemInfo.ContentInfo'
+		| 'ItemInfo.ContentRating'
+		| 'ItemInfo.ExternalIds'
+		| 'ItemInfo.Features'
+		| 'ItemInfo.ManufactureInfo'
+		| 'ItemInfo.ProductInfo'
+		| 'ItemInfo.TechnicalInfo'
+		| 'ItemInfo.Title'
+		| 'ItemInfo.TradeInInfo'
+		| 'OffersV2.Listings.Availability.MaxOrderQuantity'
+		| 'OffersV2.Listings.Availability.Message'
+		| 'OffersV2.Listings.Availability.MinOrderQuantity'
+		| 'OffersV2.Listings.Availability.Type'
+		| 'OffersV2.Listings.Condition'
+		| 'OffersV2.Listings.Condition.ConditionNote'
+		| 'OffersV2.Listings.Condition.SubCondition'
+		| 'OffersV2.Listings.DeliveryInfo.IsAmazonFulfilled'
+		| 'OffersV2.Listings.DeliveryInfo.IsFreeShippingEligible'
+		| 'OffersV2.Listings.DeliveryInfo.IsPrimeEligible'
+		| 'OffersV2.Listings.DeliveryInfo.ShippingCharges'
+		| 'OffersV2.Listings.IsBuyBoxWinner'
+		| 'OffersV2.Listings.LoyaltyPoints.Points'
+		| 'OffersV2.Listings.MerchantInfo'
+		| 'OffersV2.Listings.Price'
+		| 'OffersV2.Listings.ProgramEligibility.IsPrimeExclusive'
+		| 'OffersV2.Listings.ProgramEligibility.IsPrimePantry'
+		| 'OffersV2.Listings.Promotions'
+		| 'OffersV2.Listings.SavingBasis'
+		| 'OffersV2.Summary.HighestPrice'
+		| 'OffersV2.Summary.LowestPrice'
+		| 'OffersV2.Summary.OfferCount'
+		| 'ParentASIN';
+
+	export type SearchItemsResource = 
+		| GetItemsResource
+		| 'SearchRefinements'
+		| 'VariationSummary.Price.HighestPrice'
+		| 'VariationSummary.Price.LowestPrice'
+		| 'VariationSummary.VariationDimension';
+
+	// ===== REQUESTS =====
+
+	export interface GetItemsRequestClass {
+		ItemIds?: string[];
+		ItemIdType?: 'ASIN' | 'EAN' | 'ISBN' | 'UPC';
+		Condition?: 'Any' | 'New' | 'Used' | 'Collectible' | 'Refurbished';
+		CurrencyOfPreference?: string;
+		LanguagesOfPreference?: string[];
+		Marketplace?: string;
+		Merchant?: 'All' | 'Amazon';
+		OfferCount?: number;
+		PartnerTag?: string;
+		PartnerType?: 'Associates';
+		Resources?: GetItemsResource[];
 	}
 
-	export interface ItemsResult {
-		Items?: Item[];
-	}
-
-	export interface SearchItemsResponse {
-		SearchResult?: SearchResult;
-		Errors?: any[];
-	}
-
-	export interface GetItemsResponse {
-		ItemsResult?: ItemsResult;
-		Errors?: any[];
-	}
-
-	export interface SearchItemsRequest {
-		PartnerTag: string;
-		PartnerType: string;
+	export interface SearchItemsRequestClass {
 		Keywords?: string;
 		SearchIndex?: string;
+		Actor?: string;
+		Artist?: string;
+		Author?: string;
+		Availability?: 'Available' | 'IncludeOutOfStock';
+		Brand?: string;
+		BrowseNodeId?: string;
+		Condition?: 'Any' | 'New' | 'Used' | 'Collectible' | 'Refurbished';
+		CurrencyOfPreference?: string;
+		DeliveryFlags?: string[];
 		ItemCount?: number;
-		Resources?: string[];
-		SortBy?: string;
+		ItemPage?: number;
+		LanguagesOfPreference?: string[];
+		Marketplace?: string;
 		MaxPrice?: number;
+		Merchant?: 'All' | 'Amazon';
 		MinPrice?: number;
 		MinReviewsRating?: number;
 		MinSavingPercent?: number;
+		OfferCount?: number;
+		PartnerTag?: string;
+		PartnerType?: 'Associates';
+		Resources?: SearchItemsResource[];
+		SearchIndex?: string;
+		SortBy?: string;
+		Title?: string;
 	}
 
-	export interface GetItemsRequest {
-		PartnerTag: string;
-		PartnerType: string;
-		ItemIds: string[];
+	export interface GetBrowseNodesRequestClass {
+		BrowseNodeIds?: string[];
+		LanguagesOfPreference?: string[];
+		Marketplace?: string;
+		PartnerTag?: string;
+		PartnerType?: 'Associates';
 		Resources?: string[];
 	}
 
-	export interface GetVariationsRequest {
-		PartnerTag: string;
-		PartnerType: string;
-		ASIN: string;
+	export interface GetVariationsRequestClass {
+		ASIN?: string;
+		Condition?: 'Any' | 'New' | 'Used' | 'Collectible' | 'Refurbished';
+		CurrencyOfPreference?: string;
+		LanguagesOfPreference?: string[];
+		Marketplace?: string;
+		Merchant?: 'All' | 'Amazon';
+		OfferCount?: number;
+		PartnerTag?: string;
+		PartnerType?: 'Associates';
 		Resources?: string[];
+		VariationCount?: number;
+		VariationPage?: number;
 	}
 
-	export interface GetBrowseNodesRequest {
-		PartnerTag: string;
-		PartnerType: string;
-		BrowseNodeIds: string[];
-		Resources?: string[];
+	// ===== RESPONSES =====
+
+	export interface ErrorData {
+		Code?: string;
+		Message?: string;
 	}
 
-	export class DefaultApi {
-		searchItems(
-			request: SearchItemsRequest,
-			callback: (error: any, data: SearchItemsResponse, response: any) => void
-		): void;
+	export interface GetItemsResponse {
+		ItemsResult?: {
+			Items?: Item[];
+		};
+		Errors?: ErrorData[];
+	}
 
+	export interface SearchItemsResponse {
+		SearchResult?: {
+			Items?: Item[];
+			SearchRefinements?: any;
+			TotalResultCount?: number;
+			SearchURL?: string;
+		};
+		Errors?: ErrorData[];
+	}
+
+	export interface GetBrowseNodesResponse {
+		BrowseNodesResult?: {
+			BrowseNodes?: BrowseNode[];
+		};
+		Errors?: ErrorData[];
+	}
+
+	export interface GetVariationsResponse {
+		VariationsResult?: {
+			Items?: Item[];
+			VariationSummary?: any;
+		};
+		Errors?: ErrorData[];
+	}
+
+	// ===== API PRINCIPAL =====
+
+	export declare class DefaultApi {
+		constructor(apiClient?: ApiClient);
+
+		/**
+		 * Busca itens por ASIN, EAN, ISBN ou UPC
+		 * @param getItemsRequest Requisição com IDs dos produtos
+		 * @param callback Callback opcional para execução assíncrona
+		 * @returns Promise com resposta da API
+		 */
 		getItems(
-			request: GetItemsRequest,
-			callback: (error: any, data: GetItemsResponse, response: any) => void
-		): void;
+			getItemsRequest: GetItemsRequestClass,
+			callback?: (error: any, data?: GetItemsResponse) => void
+		): Promise<GetItemsResponse>;
 
-		getVariations(
-			request: GetVariationsRequest,
-			callback: (error: any, data: any, response: any) => void
-		): void;
+		/**
+		 * Pesquisa produtos por palavra-chave
+		 * @param searchItemsRequest Requisição de pesquisa
+		 * @param callback Callback opcional para execução assíncrona
+		 * @returns Promise com resposta da API
+		 */
+		searchItems(
+			searchItemsRequest: SearchItemsRequestClass,
+			callback?: (error: any, data?: SearchItemsResponse) => void
+		): Promise<SearchItemsResponse>;
 
+		/**
+		 * Busca informações de categorias (browse nodes)
+		 * @param getBrowseNodesRequest Requisição de categorias
+		 * @param callback Callback opcional para execução assíncrona
+		 * @returns Promise com resposta da API
+		 */
 		getBrowseNodes(
-			request: GetBrowseNodesRequest,
-			callback: (error: any, data: any, response: any) => void
-		): void;
+			getBrowseNodesRequest: GetBrowseNodesRequestClass,
+			callback?: (error: any, data?: GetBrowseNodesResponse) => void
+		): Promise<GetBrowseNodesResponse>;
+
+		/**
+		 * Busca variações de um produto
+		 * @param getVariationsRequest Requisição de variações
+		 * @param callback Callback opcional para execução assíncrona
+		 * @returns Promise com resposta da API
+		 */
+		getVariations(
+			getVariationsRequest: GetVariationsRequestClass,
+			callback?: (error: any, data?: GetVariationsResponse) => void
+		): Promise<GetVariationsResponse>;
 	}
+
+	// ===== EXPORTS =====
+
+	export const GetItemsRequest: typeof GetItemsRequestClass;
+	export const SearchItemsRequest: typeof SearchItemsRequestClass;
+	export const GetBrowseNodesRequest: typeof GetBrowseNodesRequestClass;
+	export const GetVariationsRequest: typeof GetVariationsRequestClass;
 
 	export const ApiClient: {
+		new(config?: ApiClientConfig): ApiClient;
 		instance: ApiClient;
 	};
 
-	// Model constructors
-	export class SearchItemsRequestClass {
-		static constructFromObject(data: any, obj?: SearchItemsRequestClass): SearchItemsRequestClass;
-	}
-
-	export class GetItemsRequestClass {
-		static constructFromObject(data: any, obj?: GetItemsRequestClass): GetItemsRequestClass;
-	}
-
-	export class SearchItemsResponseClass {
-		static constructFromObject(data: any, obj?: SearchItemsResponseClass): SearchItemsResponseClass;
-	}
-
-	export class GetItemsResponseClass {
-		static constructFromObject(data: any, obj?: GetItemsResponseClass): GetItemsResponseClass;
-	}
-
-	// Export model constructors with proper names
-	export {
-		SearchItemsRequestClass as SearchItemsRequest,
-		GetItemsRequestClass as GetItemsRequest,
-		SearchItemsResponseClass as SearchItemsResponse,
-		GetItemsResponseClass as GetItemsResponse
+	export const DefaultApi: {
+		new(apiClient?: ApiClient): DefaultApi;
 	};
-
-	// Default export for CommonJS compatibility
-	const PAAPI: {
-		ApiClient: ApiClient;
-		DefaultApi: DefaultApi;
-		// All interfaces and types exported
-		Money: typeof Money;
-		OffersV2: typeof OffersV2;
-		SearchItemsRequest: typeof SearchItemsRequestClass;
-		GetItemsRequest: typeof GetItemsRequestClass;
-	};
-
-	export = PAAPI;
-}
-
-// Also provide namespace declaration for easier imports
-declare namespace PAAPI {
-	export interface ApiClient {
-		accessKey: string;
-		secretKey: string;
-		host: string;
-		region: string;
-	}
-
-	export interface Money {
-		Amount: number;
-		Currency: string;
-		DisplayAmount: string;
-	}
-
-	export interface OffersV2 {
-		Listings?: OfferListingV2[];
-	}
-
-	export interface OfferListingV2 {
-		Price?: OfferPriceV2;
-		Availability?: OfferAvailabilityV2;
-		Condition?: OfferConditionV2;
-		IsBuyBoxWinner?: boolean;
-		MerchantInfo?: OfferMerchantInfoV2;
-	}
-
-	export interface OfferPriceV2 {
-		Money?: Money;
-		SavingBasis?: SavingBasis;
-		Savings?: SavingsV2;
-	}
-
-	export interface OfferAvailabilityV2 {
-		Message?: string;
-		Type?: string;
-		MaxOrderQuantity?: number;
-		MinOrderQuantity?: number;
-	}
-
-	export interface OfferConditionV2 {
-		Value?: string;
-		SubCondition?: string;
-		ConditionNote?: string;
-	}
-
-	export interface OfferMerchantInfoV2 {
-		Name?: string;
-		Id?: string;
-	}
-
-	export interface SavingBasis {
-		Money: Money;
-		SavingBasisType?: string;
-		SavingBasisTypeLabel?: string;
-	}
-
-	export interface SavingsV2 {
-		Money?: Money;
-		Percentage?: number;
-	}
-
-	export interface SearchItemsRequest {
-		PartnerTag: string;
-		PartnerType: string;
-		Keywords?: string;
-		SearchIndex?: string;
-		ItemCount?: number;
-		Resources?: string[];
-	}
-
-	export interface GetItemsRequest {
-		PartnerTag: string;
-		PartnerType: string;
-		ItemIds: string[];
-		Resources?: string[];
-	}
-
-	export interface Item {
-		ASIN?: string;
-		ItemInfo?: ItemInfo;
-		OffersV2?: OffersV2;
-	}
-
-	export interface ItemInfo {
-		Title?: {
-			DisplayValue?: string;
-		};
-	}
 }
