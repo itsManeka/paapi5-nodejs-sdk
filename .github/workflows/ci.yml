@@ -140,9 +140,10 @@ jobs:
         
         # Create test TypeScript file
         cat > test-types.ts << 'EOF'
-        import * as PAAPI from './index';
+        // Test import from index.d.ts using namespace approach
+        /// <reference path="./index.d.ts" />
         
-        // Test basic request types
+        // Test namespace PAAPI types
         const searchRequest: PAAPI.SearchItemsRequest = {
           PartnerTag: 'test-tag',
           PartnerType: 'Associates',

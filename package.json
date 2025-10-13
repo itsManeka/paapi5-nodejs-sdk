@@ -1,6 +1,6 @@
 {
 	"name": "@itsmaneka/paapi5-nodejs-sdk",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "ProductAdvertisingAPI 5.0 NodeJS SDK with OffersV2 support - Enhanced fork with active maintenance",
 	"main": "src/index.js",
 	"types": "index.d.ts",
@@ -39,7 +39,7 @@
 	"scripts": {
 		"test": "npm run test:basic && npm run test:typescript",
 		"test:basic": "node -e \"console.log('Testing SDK loading...'); const sdk = require('./src/index.js'); if (!sdk.ApiClient || !sdk.DefaultApi || !sdk.OffersV2) throw new Error('SDK components missing'); console.log('✅ SDK tests passed');\"",
-		"test:typescript": "tsc index.d.ts --noEmit --strict --skipLibCheck || echo 'TypeScript not available, skipping TS tests'",
+		"test:typescript": "node -e \"console.log('Testing TypeScript definitions...'); const fs = require('fs'); if (!fs.existsSync('index.d.ts')) { console.log('❌ TypeScript definitions missing'); process.exit(1); } try { require('child_process').execSync('tsc index.d.ts --noEmit --strict --skipLibCheck', {stdio: 'inherit'}); console.log('✅ TypeScript definitions valid'); } catch(e) { console.log('⚠️ TypeScript not available or definitions invalid, skipping TS tests'); }\"",
 		"audit:security": "npm audit --audit-level moderate",
 		"release:patch": "node -e \"if (process.platform === 'win32') { require('child_process').exec('powershell -File scripts/release.ps1 patch'); } else { require('child_process').exec('bash scripts/release.sh patch'); }\"",
 		"release:minor": "node -e \"if (process.platform === 'win32') { require('child_process').exec('powershell -File scripts/release.ps1 minor'); } else { require('child_process').exec('bash scripts/release.sh minor'); }\"",

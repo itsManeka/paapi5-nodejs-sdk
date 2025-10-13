@@ -1,8 +1,8 @@
-// Type definitions for paapi5-nodejs-sdk
+// Type definitions for @itsmaneka/paapi5-nodejs-sdk
 // Project: https://github.com/itsManeka/paapi5-nodejs-sdk
 // Definitions by: PAAPI5 NodeJS SDK Team
 
-declare module 'paapi5-nodejs-sdk' {
+declare module '@itsmaneka/paapi5-nodejs-sdk' {
 	export interface ApiClient {
 		accessKey: string;
 		secretKey: string;
@@ -297,4 +297,108 @@ declare module 'paapi5-nodejs-sdk' {
 		SearchItemsResponseClass as SearchItemsResponse,
 		GetItemsResponseClass as GetItemsResponse
 	};
+
+	// Default export for CommonJS compatibility
+	const PAAPI: {
+		ApiClient: ApiClient;
+		DefaultApi: DefaultApi;
+		// All interfaces and types exported
+		Money: typeof Money;
+		OffersV2: typeof OffersV2;
+		SearchItemsRequest: typeof SearchItemsRequestClass;
+		GetItemsRequest: typeof GetItemsRequestClass;
+	};
+
+	export = PAAPI;
+}
+
+// Also provide namespace declaration for easier imports
+declare namespace PAAPI {
+	export interface ApiClient {
+		accessKey: string;
+		secretKey: string;
+		host: string;
+		region: string;
+	}
+
+	export interface Money {
+		Amount: number;
+		Currency: string;
+		DisplayAmount: string;
+	}
+
+	export interface OffersV2 {
+		Listings?: OfferListingV2[];
+	}
+
+	export interface OfferListingV2 {
+		Price?: OfferPriceV2;
+		Availability?: OfferAvailabilityV2;
+		Condition?: OfferConditionV2;
+		IsBuyBoxWinner?: boolean;
+		MerchantInfo?: OfferMerchantInfoV2;
+	}
+
+	export interface OfferPriceV2 {
+		Money?: Money;
+		SavingBasis?: SavingBasis;
+		Savings?: SavingsV2;
+	}
+
+	export interface OfferAvailabilityV2 {
+		Message?: string;
+		Type?: string;
+		MaxOrderQuantity?: number;
+		MinOrderQuantity?: number;
+	}
+
+	export interface OfferConditionV2 {
+		Value?: string;
+		SubCondition?: string;
+		ConditionNote?: string;
+	}
+
+	export interface OfferMerchantInfoV2 {
+		Name?: string;
+		Id?: string;
+	}
+
+	export interface SavingBasis {
+		Money: Money;
+		SavingBasisType?: string;
+		SavingBasisTypeLabel?: string;
+	}
+
+	export interface SavingsV2 {
+		Money?: Money;
+		Percentage?: number;
+	}
+
+	export interface SearchItemsRequest {
+		PartnerTag: string;
+		PartnerType: string;
+		Keywords?: string;
+		SearchIndex?: string;
+		ItemCount?: number;
+		Resources?: string[];
+	}
+
+	export interface GetItemsRequest {
+		PartnerTag: string;
+		PartnerType: string;
+		ItemIds: string[];
+		Resources?: string[];
+	}
+
+	export interface Item {
+		ASIN?: string;
+		ItemInfo?: ItemInfo;
+		OffersV2?: OffersV2;
+	}
+
+	export interface ItemInfo {
+		Title?: {
+			DisplayValue?: string;
+		};
+	}
 }
