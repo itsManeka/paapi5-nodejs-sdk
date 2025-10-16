@@ -91,11 +91,22 @@ declare module '@itsmaneka/paapi5-nodejs-sdk' {
 		Savings?: Money;
 	}
 
+	export interface SavingBasisV2 {
+		Money?: Money;
+		SavingBasisType?: string;
+		SavingBasisTypeLabel?: string;
+	}
+
+	export interface SavingsV2 {
+		Money?: Money;
+		Percentage?: number;
+	}
+
 	export interface OfferPriceV2 {
 		Money?: Money;
+		SavingBasis?: SavingBasisV2;
+		Savings?: SavingsV2;
 		PriceType?: string;
-		Savings?: Money;
-		SavingBasis?: Money;
 	}
 
 	export type AvailabilityType = 'PREORDER' | 'OUT_OF_STOCK' | 'IN_STOCK' | 'LEADTIME';
@@ -145,7 +156,6 @@ declare module '@itsmaneka/paapi5-nodejs-sdk' {
 		Price?: OfferPriceV2;
 		ProgramEligibility?: ProgramEligibility;
 		Promotions?: any[];
-		SavingBasis?: OfferPriceV2;
 		ViolatesMAP?: boolean;
 	}
 
