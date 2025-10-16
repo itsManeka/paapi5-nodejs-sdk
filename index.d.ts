@@ -1,6 +1,6 @@
 /**
  * @itsmaneka/paapi5-nodejs-sdk TypeScript Definitions
- * Versão: 1.0.0
+ * Versão: 1.0.1
  * Repositório: https://github.com/itsmaneka/paapi5-nodejs-sdk
  */
 

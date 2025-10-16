@@ -7,8 +7,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-<!--LATEST=1.2.0-->
+<!--LATEST=1.2.6-->
 <!--ENTRYINSERT-->
+
+## [1.2.6] - 2024-06-20
+### 🛠️ Fixed
+- **Type Definitions**: Corrected `Bindings` to `Binding` in TypeScript definitions for consistency
 
 ## [1.2.5] - 
 
