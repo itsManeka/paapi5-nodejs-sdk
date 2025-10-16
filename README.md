@@ -1,4 +1,4 @@
-# Product Advertising API 5.0 SDK for NodeJS (v1.2.0) - Enhanced Fork
+# Product Advertising API 5.0 SDK for NodeJS - Enhanced Fork
 
 [![NPM](https://nodei.co/npm/@itsmaneka/paapi5-nodejs-sdk.svg?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/@itsmaneka/paapi5-nodejs-sdk/)
 

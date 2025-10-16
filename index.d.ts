@@ -79,7 +79,7 @@ declare module '@itsmaneka/paapi5-nodejs-sdk' {
 	// ===== CLASSIFICAÇÕES E CATEGORIAS =====
 
 	export interface Classifications {
-		Bindings?: DisplayValue;
+		Binding?: DisplayValue;
 		ProductGroup?: DisplayValue;
 	}
 
